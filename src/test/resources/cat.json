@@ -1,0 +1,11 @@
+{
+  "name": "Shuuji",
+  "breed": "snow-shoes",
+  "color": "gray",
+  "age": 0.3,
+  "relatives": [
+    "Beckham",
+    "Yuki",
+    "Venya"
+  ]
+}
