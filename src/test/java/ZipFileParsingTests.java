@@ -1,8 +1,8 @@
 import com.codeborne.pdftest.PDF;
 import com.codeborne.xlstest.XLS;
 import com.opencsv.CSVReader;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,6 +31,8 @@ public class ZipFileParsingTests {
           return;
         }
       }
+      Assertions.fail("No PDF file found in zip archive");
+
     }
   }
 
@@ -45,10 +47,11 @@ public class ZipFileParsingTests {
 
         if (entry.getName().contains(".xlsx")) {
           XLS content = new XLS(zis);
-          assertThat(content.excel.getSheetAt(0).getRow(1).getCell(0).getStringCellValue()).contains("недозвон");
+          assertThat(content.excel.getSheetAt(0).getRow(2).getCell(1).getStringCellValue()).contains("недозвон");
           return;
         }
       }
+      Assertions.fail("No XLS file found in zip archive");
     }
   }
 
@@ -68,6 +71,7 @@ public class ZipFileParsingTests {
           return;
         }
       }
+      Assertions.fail("No CSV file found in zip archive");
     }
   }
 }
