@@ -17,7 +17,7 @@ public class ZipFileParsingTests {
   ClassLoader cl = ZipFileParsingTests.class.getClassLoader();
 
   @Test
-  void zipParseTest() throws Exception {
+  void zipParsePdfTest() throws Exception {
     try (
             InputStream resource = cl.getResourceAsStream("Archive.zip");
             ZipInputStream zis = new ZipInputStream(resource)
@@ -28,13 +28,44 @@ public class ZipFileParsingTests {
         if (entry.getName().endsWith(".pdf")) {
           PDF content = new PDF(zis);
           assertThat(content.text).contains("Шпаргалка");
-        } else if (entry.getName().contains(".xlsx")) {
+          return;
+        }
+      }
+    }
+  }
+
+  @Test
+  void zipParseXlsxTest() throws Exception {
+    try (
+            InputStream resource = cl.getResourceAsStream("Archive.zip");
+            ZipInputStream zis = new ZipInputStream(resource)
+    ) {
+      ZipEntry entry;
+      while ((entry = zis.getNextEntry()) != null) {
+
+        if (entry.getName().contains(".xlsx")) {
           XLS content = new XLS(zis);
           assertThat(content.excel.getSheetAt(0).getRow(1).getCell(0).getStringCellValue()).contains("недозвон");
-        } else if (entry.getName().endsWith(".csv")) {
+          return;
+        }
+      }
+    }
+  }
+
+  @Test
+  void zipParseCsvTest() throws Exception {
+    try (
+            InputStream resource = cl.getResourceAsStream("Archive.zip");
+            ZipInputStream zis = new ZipInputStream(resource)
+    ) {
+      ZipEntry entry;
+      while ((entry = zis.getNextEntry()) != null) {
+
+        if (entry.getName().endsWith(".csv")) {
           CSVReader reader = new CSVReader(new InputStreamReader(zis));
           List<String[]> content = reader.readAll();
           assertThat(content.get(1)[0]).contains("строка3");
+          return;
         }
       }
     }
